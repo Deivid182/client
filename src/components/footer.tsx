@@ -2,7 +2,7 @@
 const Footer = () => {
   return (
     <div className="bg-blue-800 py-10">
-      <div className="container flex justify-between">
+      <div className="container flex flex-col gap-2 md:flex-row md:gap-0 items-center md:justify-between">
         <span className="text-3xl text-white font-bold tracking-tight">
           Mernholidays.com
         </span>

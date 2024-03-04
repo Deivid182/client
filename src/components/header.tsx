@@ -8,8 +8,8 @@ const Header = () => {
           <Link to={"/"}>MernHolidays</Link>
         </span>
         <span className="flex gap-2">
-          <Link to={"/sign-in"} className="flex items-center text-blue-600 bg-white px-3 font-bold hover:bg-gray-100 hover:text-blue-800">Login</Link>
-          <Link to={"/sign-up"} className="flex items-center text-white hover:text-blue-600">Register</Link>
+          <Link to={"/login"} className="flex items-center text-blue-600 bg-white px-3 font-bold hover:bg-gray-100 hover:text-blue-800">Login</Link>
+          <Link to={"/register"} className="flex items-center text-white hover:text-blue-600">Register</Link>
         </span>
       </div>
     </div>
