@@ -2,10 +2,14 @@ import { useForm } from "react-hook-form";
 import { RegisterData } from "../types"
 import { useMutation } from "@tanstack/react-query";
 import { register as registerApi } from "../api/api-client";
-import { useToast } from "../hooks/use-toast";
+import { useApp } from "../hooks/use-app";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const { showToast } = useToast()
+  //TODO: disable the submit button if there is an error
+  //TODO: add a loader
+  const { showToast } = useApp()
+  const navigate = useNavigate()
   const {
     register,
     watch,
@@ -18,8 +22,10 @@ const Register = () => {
     mutationFn: registerApi,
     onSuccess: (data) => {
       showToast({ message: data.message, type: "success" })
+      navigate("/")
     },
     onError: (error) => {
+      console.log(error)
       showToast({ message: error.message, type: "error" })
     },
   })
