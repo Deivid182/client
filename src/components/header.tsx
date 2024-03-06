@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useApp } from "../hooks/use-app";
+import LogoutBtn from "./logout-btn";
 
 const Header = () => {
   const { isAuth } = useApp();
@@ -15,17 +16,17 @@ const Header = () => {
             <>
               <Link
                 to={"/my-bookings"}
-                className="flex items-center text-white hover:text-blue-600"
+                className="flex items-center text-white hover:bg-blue-600 px-3"
               >
                 My Bookings
               </Link>
               <Link
                 to={"/my-hotels"}
-                className="flex items-center text-white hover:text-blue-600"
+                className="flex items-center text-white hover:bg-blue-600 px-3"
               >
                 My Hotels
               </Link>
-              <button>Log Out</button>
+              <LogoutBtn />
             </>
           ) : (
             <Link

@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { RegisterData } from "../types"
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { register as registerApi } from "../api/api-client";
 import { useApp } from "../hooks/use-app";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   //TODO: disable the submit button if there is an error
@@ -18,10 +18,12 @@ const Register = () => {
   } = useForm<RegisterData>();
 
 
+  const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: registerApi,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       showToast({ message: data.message, type: "success" })
+      await queryClient.invalidateQueries({ queryKey: ["validateAuth"] });
       navigate("/")
     },
     onError: (error) => {
@@ -125,12 +127,23 @@ const Register = () => {
           <span className="text-red-500">This field is required</span>
         )}
       </label>
-      <button
-        type="submit"
-        className="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-500 text-xl"
-      >
-        Register
-      </button>
+      <div className="flex justify-between items-center">
+        <span>
+          Already have an account?{" "}
+          <Link
+            to={"/login"}
+            className="text-blue-600 bg-white px-3 font-bold hover:bg-gray-100 hover:text-blue-800"
+          >
+            Login
+          </Link>
+        </span>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-500 text-xl"
+          >
+          Register
+        </button>
+      </div>
     </form>
   );
 };
