@@ -30,7 +30,7 @@ const LogoutBtn = () => {
       onClick={onClick}
       className="bg-white text-blue-600 px-3 font-bold hover:bg-gray-100 "
     >
-      Log Out
+      Log out
     </button>
   );
 };
