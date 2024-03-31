@@ -6,7 +6,12 @@ import TypeSelection from "./type-selection";
 import Facilities from "./facilities";
 import ImagesSection from "./images-section";
 
-const HotelForm = () => {
+type Props = {
+  handleAdd: (data: FormData) => void;
+  isLoading: boolean;
+};
+
+const HotelForm: React.FC<Props> = ({ handleAdd, isLoading }) => {
   const {
     handleSubmit,
     register,
@@ -29,7 +34,7 @@ const HotelForm = () => {
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data)
+    // console.log(data);
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -42,8 +47,18 @@ const HotelForm = () => {
     formData.append("adultCount", data.adultCount.toString());
     formData.append("childrenCount", data.childrenCount.toString());
 
+    data.facilities.forEach((facility: string, index: number) => {
+      formData.append(`facilities[${index}]`, facility);
+    });
 
-    console.log(formData);
+    
+    Array.from(data.imageFiles).forEach((imageFile) => {
+      // Append each file to formData with a unique key
+      formData.append(`imageFiles`, imageFile as File);
+   });
+
+    // console.log(Object.fromEntries(formData));
+    handleAdd(formData);
   };
 
   return (
@@ -98,8 +113,13 @@ const HotelForm = () => {
         errors={errors}
         required
       />
-      <TypeSelection register={register} watch={watch} errors={errors} id="type"/>
-      <Facilities register={register} errors={errors} id="facilities"/>
+      <TypeSelection
+        register={register}
+        watch={watch}
+        errors={errors}
+        id="type"
+      />
+      <Facilities register={register} errors={errors} id="facilities" />
       <div className="flex gap-2 w-full bg-gray-300 p-6">
         <Input
           type="number"
@@ -118,13 +138,14 @@ const HotelForm = () => {
           required
         />
       </div>
-      <ImagesSection register={register} errors={errors} id="imageUrls"/>
+      <ImagesSection register={register} errors={errors} id="imageFiles" />
 
       <button
         type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        disabled={isLoading}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-400"
       >
-        Submit
+        {isLoading ? "Loading..." : "Submit"}
       </button>
     </form>
   );

@@ -56,3 +56,16 @@ export const validateAuth = async () => {
     throw new Error(await res.text())
   }
 }
+
+export const newHotel = async (data: FormData) => {
+  const res = await fetch(`${SERVER_URL}/hotels`,{
+    method: 'POST',
+    credentials: 'include',
+    body: data
+  })
+  if(res.ok) {
+    return await res.json()
+  } else {
+    throw new Error(await res.text())
+  }
+}

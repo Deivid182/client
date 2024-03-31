@@ -16,8 +16,8 @@ const ImagesSection: React.FC<TypeSelectionProps> = ({
 }) => {
   return (
     <div className="space-y-2">
-      <label htmlFor="images">Images</label>
-      <input id="images" multiple accept="image/*" className="w-full text-gray-500" type="file" {...register(id, {
+      <label htmlFor={id}>Images</label>
+      <input id={id} multiple accept="image/*" className="w-full text-gray-500" type="file" {...register(id, {
         validate: (value) => {
           if (value.length === 0) {
             return "Please select at least one image";
