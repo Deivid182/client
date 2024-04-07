@@ -15,13 +15,13 @@ const Header = () => {
           {isAuth ? (
             <>
               <Link
-                to={"/my-bookings"}
+                to={"/home/my-bookings"} 
                 className="flex items-center text-white hover:bg-blue-600 px-3"
               >
                 My Bookings
               </Link>
               <Link
-                to={"/my-hotels"}
+                to={"/home/"}
                 className="flex items-center text-white hover:bg-blue-600 px-3"
               >
                 My Hotels

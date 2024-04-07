@@ -6,6 +6,7 @@ import ProtectedRoute from './layouts/protected-route'
 const Register = lazy(() => import('./pages/register'))
 const Login = lazy(() => import('./pages/login'))
 const NewHotel = lazy(() => import('./pages/hotels/new-hotel'))
+const MyHotels = lazy(() => import('./pages/hotels/my-hotels'))
 
 function App() {
 
@@ -29,7 +30,13 @@ function App() {
                 <NewHotel />
               </Suspense>
             }/>
+            <Route index element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MyHotels />
+              </Suspense>
+            }/>
           </Route>
+
         </Route>
       </Routes>
     </Router>
