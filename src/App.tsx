@@ -7,6 +7,7 @@ const Register = lazy(() => import('./pages/register'))
 const Login = lazy(() => import('./pages/login'))
 const NewHotel = lazy(() => import('./pages/hotels/new-hotel'))
 const MyHotels = lazy(() => import('./pages/hotels/my-hotels'))
+const EditHotel = lazy(() => import('./pages/hotels/edit-hotel'))
 
 function App() {
 
@@ -25,14 +26,21 @@ function App() {
             </Suspense>
           }/>
           <Route path="/home" element={<ProtectedRoute />}>
+            <Route index element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MyHotels />
+              </Suspense>
+            }/>
+
             <Route path='new-hotel' element={
               <Suspense fallback={<div>Loading...</div>}>
                 <NewHotel />
               </Suspense>
             }/>
-            <Route index element={
+
+            <Route path='edit-hotel/:id' element={
               <Suspense fallback={<div>Loading...</div>}>
-                <MyHotels />
+                <EditHotel />
               </Suspense>
             }/>
           </Route>

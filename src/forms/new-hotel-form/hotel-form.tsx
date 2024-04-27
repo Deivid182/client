@@ -1,21 +1,26 @@
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
-// import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useEffect, useMemo, useState } from "react";
 import Input from "@/components/inputs/input";
 import Select from "@/components/inputs/select";
 import TypeSelection from "./type-selection";
 import Facilities from "./facilities";
 import ImagesSection from "./images-section";
+import { HotelType } from "@/types";
 
 type Props = {
-  handleAdd: (data: FormData) => void;
+  onSave: (data: FormData) => void;
   isLoading: boolean;
+  hotel?: HotelType;
 };
 
-const HotelForm: React.FC<Props> = ({ handleAdd, isLoading }) => {
+const HotelForm: React.FC<Props> = ({ onSave, isLoading, hotel }) => {
+  const [showImageSection, setShowImageSection] = useState(false)
   const {
     handleSubmit,
     register,
     watch,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -33,10 +38,29 @@ const HotelForm: React.FC<Props> = ({ handleAdd, isLoading }) => {
     },
   });
 
+  useEffect(() => {
+    if (hotel) {
+      console.log(hotel)
+      reset({
+        name: hotel.name,
+        city: hotel.city,
+        country: hotel.country,
+        description: hotel.description,
+        pricePerNight: hotel.pricePerNight,
+        type: hotel.type,
+        facilities: hotel.facilities,
+        adultCount: hotel.adultCount,
+        childrenCount: hotel.childrenCount,
+        starRating: hotel.starRating,
+        imageUrls: hotel.imageUrls || [],
+      });
+    }
+  }, [hotel, reset]);
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     // console.log(data);
     const formData = new FormData();
-
+    if(hotel) formData.append("id", hotel._id.toString());
     formData.append("name", data.name);
     formData.append("city", data.city);
     formData.append("country", data.country);
@@ -51,18 +75,28 @@ const HotelForm: React.FC<Props> = ({ handleAdd, isLoading }) => {
       formData.append(`facilities[${index}]`, facility);
     });
 
-    
-    Array.from(data.imageFiles).forEach((imageFile) => {
+    if(data.imageUrls) {
+      data.imageUrls.forEach((imageUrl: string, index: number) => {
+        formData.append(`imageUrls[${index}]`, imageUrl);
+      })
+    }
+
+    data.imageFiles && Array.from(data.imageFiles).forEach((imageFile) => {
       // Append each file to formData with a unique key
       formData.append(`imageFiles`, imageFile as File);
    });
 
-    // console.log(Object.fromEntries(formData));
-    handleAdd(formData);
+    console.log(Object.fromEntries(formData));
+    onSave(formData);
   };
+
+  const isVisibleImagesSection = useMemo(() => {
+    return showImageSection || !hotel?._id
+  }, [hotel?._id, showImageSection]);
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="text-4xl font-bold">{hotel ? "Edit hotel" : "Add new hotel"}</h2>
       <Input
         type="text"
         id="name"
@@ -138,7 +172,22 @@ const HotelForm: React.FC<Props> = ({ handleAdd, isLoading }) => {
           required
         />
       </div>
-      <ImagesSection register={register} errors={errors} id="imageFiles" />
+      
+      <div className="flex gap-2 w-full items-baseline">
+
+        <ImagesSection isVisible={isVisibleImagesSection} watch={watch} setValue={setValue} register={register} errors={errors} id="imageFiles" required={hotel?.imageUrls?.length ? false : true}/>
+        {
+          hotel?._id && (
+          <button
+            type="button"
+            onClick={() => setShowImageSection(!showImageSection)}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-400"
+          >
+            {showImageSection ? "Keep" : "Add"}
+          </button>
+          )
+        }
+      </div>
 
       <button
         type="submit"

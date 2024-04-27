@@ -80,3 +80,28 @@ export const getHotels = async (): Promise<HotelType[]> => {
     throw new Error(await res.text())
   }
 }
+
+export const getHotel = async (id: HotelType["_id"]): Promise<HotelType> => {
+  const res = await fetch(`${SERVER_URL}/hotels/${id}`, {
+    credentials: 'include'
+  })
+  if(res.ok) {
+    return await res.json()
+  } else {
+    throw new Error(await res.text())
+  }
+}
+
+export const editHotel = async (id: HotelType["_id"], data: FormData) => {
+  const res = await fetch(`${SERVER_URL}/hotels/${id}`, {
+    method: 'PATCH',
+    credentials: 'include',
+    body: data
+  })
+  if(res.ok) {
+    return await res.json()
+  } else {
+    console.log(await res.text())
+    throw new Error(await res.text())
+  }
+}

@@ -22,7 +22,7 @@ const NewHotel = () => {
   }
   
   return (
-    <HotelForm handleAdd={handleAdd} isLoading={isPending} />
+    <HotelForm onSave={handleAdd} isLoading={isPending} />
   )
 }
 

@@ -66,6 +66,7 @@ export type HotelType = {
   childrenCount: number
   facilities: string[]
   imageUrls: string[]
+  imageFiles: string[]
   pricePerNight: number
   starRating: number
   createdAt: string
