@@ -8,6 +8,7 @@ const Login = lazy(() => import('./pages/login'))
 const NewHotel = lazy(() => import('./pages/hotels/new-hotel'))
 const MyHotels = lazy(() => import('./pages/hotels/my-hotels'))
 const EditHotel = lazy(() => import('./pages/hotels/edit-hotel'))
+const Search = lazy(() => import('./pages/hotels/search'))
 
 function App() {
 
@@ -41,6 +42,11 @@ function App() {
             <Route path='edit-hotel/:id' element={
               <Suspense fallback={<div>Loading...</div>}>
                 <EditHotel />
+              </Suspense>
+            }/>
+            <Route path='search' element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Search />
               </Suspense>
             }/>
           </Route>

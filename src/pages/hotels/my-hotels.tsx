@@ -5,7 +5,7 @@ import { Building, Hotel, Map, Money } from "@/components/icons"
 const Hotels = () => {
 
   const { data: hotels, isLoading, isError } = useQuery({ queryKey: ["hotels"], queryFn: getHotels })
-  console.log(hotels)
+  // console.log(hotels)
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -32,10 +32,10 @@ const Hotels = () => {
       </span>
       <div className="grid grid-cols-1 gap-5">
         {hotels.map((hotel) => (
-          <div className="flex flex-col justify-between border gap-4 border-slate-300 p-5 rounded-lg">
+          <div className="flex flex-col justify-between border gap-4 border-slate-300 p-5 rounded-lg" key={hotel._id}>
             <h2 className="text-2xl font-bold">{hotel.name}</h2>
             <div className="whitespace-pre-line">{hotel.description}</div>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid lg:grid-cols-5 gap-2">
               <div className="border border-slate-500 rounded-sm p-3 flex items-center">
                 <Map />
                 {hotel.city}, {hotel.country}

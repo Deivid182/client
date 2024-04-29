@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query"
 import { useApp } from "@/hooks/use-app"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { getHotel, editHotel } from "@/api/api-client"
 import HotelForm from "@/forms/new-hotel-form/hotel-form"
 
@@ -11,7 +11,7 @@ interface Params extends Record<string, string | undefined> {
 const EditHotel = () => {
 
   const { showToast } = useApp()
-
+  const navigate = useNavigate()
   const { id } = useParams<Params>()
   const { data: hotel } = useQuery({
     queryKey: ["hotel", id],
@@ -31,6 +31,7 @@ const EditHotel = () => {
     },
     onSuccess: () => {
       showToast({ message: "Hotel updated successfully", type: "success" })
+      setTimeout(() => navigate("/home"), 3000)
     },
     onError: () => {
       showToast({ message: "Failed to update hotel", type: "error" })
