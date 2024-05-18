@@ -113,16 +113,37 @@ export type SearchParams = {
   adultCount?: string
   childrenCount?: string
   page?: string
+  facilities?: string[]
+  types?: string[]
+  stars?: string[]
+  maxPrice?: string
+  sortOption?: string
 }
 
 export const searchHotels = async (searchParams: SearchParams): Promise<HotelSearchResponse> => {
   const queryParams = new URLSearchParams()
+  console.log(searchParams)
   queryParams.append("destination", searchParams.destination || "")
   queryParams.append("checkIn", searchParams.checkIn || "")
   queryParams.append("checkOut", searchParams.checkOut || "")
   queryParams.append("adultCount", searchParams.adultCount || "")
   queryParams.append("childrenCount", searchParams.childrenCount || "")
   queryParams.append("page", searchParams.page || "")
+  queryParams.append("maxPrice", searchParams.maxPrice || "")
+  queryParams.append("sortOption", searchParams.sortOption || "")
+
+  searchParams.facilities?.forEach((facility, index) => {
+    queryParams.append(`facilities[${index}]`, facility)
+  })
+
+  searchParams.types?.forEach((type, index) => {
+    queryParams.append(`types[${index}]`, type)
+  })
+
+  searchParams.stars?.forEach((star, index: number) => {
+    queryParams.append(`stars[${index}]`, star)
+  })
+  console.log(Object.fromEntries(queryParams.entries()))
 
   const res = await fetch(`${SERVER_URL}/hotels/search?${queryParams.toString()}`)
   if(res.ok) {
