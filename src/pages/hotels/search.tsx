@@ -15,8 +15,9 @@ const Search = () => {
   const [selectedStars, setSelectedStars] = useState<string[]>([]);
   const [selectedHotelTypes, setSelectedHotelTypes] = useState<string[]>([]);
   const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  const [sortOption, setSortOption] = useState("");
 
-  const [selectedPrice, setSelectedPrice] = useState(0);
+  const [selectedPrice, setSelectedPrice] = useState<number | undefined>();
 
   const searchParams = {
     destination: searchValues.destination,
@@ -28,7 +29,8 @@ const Search = () => {
     stars: selectedStars,
     types: selectedHotelTypes,
     facilities: selectedFacilities,
-    maxPrice: selectedPrice.toString(),
+    maxPrice: selectedPrice?.toString(),
+    sortOption,
   };
 
   const { data } = useQuery({
@@ -45,7 +47,9 @@ const Search = () => {
         : prev.filter((star) => star !== starRating)
     );
   };
-  const handleHotelTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleHotelTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const hotelType = event.target.value;
 
     setSelectedHotelTypes((prev) =>
@@ -71,10 +75,22 @@ const Search = () => {
           <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
             Filter by:
           </h3>
-          <StarRatingFilter selectedStars={selectedStars} onChange={handleSelectStars} />
-          <HotelTypeFilter selectedHotelTypes={selectedHotelTypes} onChange={handleHotelTypeChange}/>
-          <FacilitiesFilter selectedFacilities={selectedFacilities} onChange={handleFacilityChange}/>
-          <PriceFilter selectedPrice={selectedPrice} onChange={(value) => setSelectedPrice(value)} />
+          <StarRatingFilter
+            selectedStars={selectedStars}
+            onChange={handleSelectStars}
+          />
+          <HotelTypeFilter
+            selectedHotelTypes={selectedHotelTypes}
+            onChange={handleHotelTypeChange}
+          />
+          <FacilitiesFilter
+            selectedFacilities={selectedFacilities}
+            onChange={handleFacilityChange}
+          />
+          <PriceFilter
+            selectedPrice={selectedPrice}
+            onChange={(value) => setSelectedPrice(value)}
+          />
         </div>
       </div>
       <div className="flex flex-col gap-5">
@@ -84,6 +100,20 @@ const Search = () => {
             {searchValues.destination && ` in ${searchValues.destination}`}
           </span>
           {/* TODO sort options */}
+          <select
+            className="p-2 border rounded-md"
+            value={sortOption}
+            onChange={(event) => setSortOption(event.target.value)}
+          >
+            <option value="">Sort By</option>
+            <option value="starRating">Star Rating</option>
+            <option value="pricePerNightAsc">
+              Price Per Night (low to high)
+            </option>
+            <option value="pricePerNightDesc">
+              Price Per Night (high to low)
+            </option>
+          </select>
         </div>
         {data?.data.map((hotel) => (
           <SearchResultsCard key={hotel._id} hotel={hotel} />

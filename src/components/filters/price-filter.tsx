@@ -1,6 +1,6 @@
 type Props = {
   selectedPrice?: number;
-  onChange: (value: number) => void;
+  onChange: (value?: number) => void;
 };
 
 const PriceFilter = ({ selectedPrice, onChange }: Props) => {
@@ -11,7 +11,9 @@ const PriceFilter = ({ selectedPrice, onChange }: Props) => {
         className="w-full border border-slate-300 rounded p-2 outline-none"
         name="price"
         value={selectedPrice}
-        onChange={(event) => onChange(Number(event.target.value))}
+        onChange={(event) => {
+          onChange(event.target.value ? parseInt(event.target.value) : undefined)
+        }}
       >
         <option value="">Select a price</option>
         {[
