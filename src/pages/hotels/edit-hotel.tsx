@@ -6,7 +6,7 @@ import HotelForm from "@/forms/new-hotel-form/hotel-form"
 
 interface Params extends Record<string, string | undefined> {
   id: string;
- }
+}
 
 const EditHotel = () => {
 
