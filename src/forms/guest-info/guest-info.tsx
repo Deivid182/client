@@ -12,11 +12,11 @@ type GuestInfoFormData = {
   checkIn: Date;
   checkOut: Date;
   adultCount: number;
-  childCount: number;
+  childrenCount: number;
 };
 
 const GuestInfo = ({ hotelId, pricePerNight }: Props) => {
-  const { searchValues } = useSearch();
+  const { searchValues, saveSearchValues } = useSearch();
   const { isAuth } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,7 +32,7 @@ const GuestInfo = ({ hotelId, pricePerNight }: Props) => {
       checkIn: searchValues.checkIn,
       checkOut: searchValues.checkOut,
       adultCount: searchValues.adultCount,
-      childCount: searchValues.childrenCount,
+      childrenCount: searchValues.childrenCount,
     },
   });
 
@@ -43,35 +43,30 @@ const GuestInfo = ({ hotelId, pricePerNight }: Props) => {
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);
 
-  // const onSignInClick = (data: GuestInfoFormData) => {
-  //   searchValues(
-  //     "",
-  //     data.checkIn,
-  //     data.checkOut,
-  //     data.adultCount,
-  //     data.childCount
-  //   );
-  //   navigate("/sign-in", { state: { from: location } });
-  // };
-
-  // const onSubmit = (data: GuestInfoFormData) => {
-  //   search.saveSearchValues(
-  //     "",
-  //     data.checkIn,
-  //     data.checkOut,
-  //     data.adultCount,
-  //     data.childCount
-  //   );
-  //   navigate(`/hotel/${hotelId}/booking`);
-  // };
+  const onSignInClick = (data: GuestInfoFormData) => {
+    const values = {
+      destination: "",
+      ...data
+    }
+    saveSearchValues(values);
+    navigate("/login", { state: { from: location } });
+  };
+  const onSubmit = (data: GuestInfoFormData) => {
+    const values = {
+      destination: "",
+      ...data
+    }
+    saveSearchValues(values);
+    navigate(`/hotel/${hotelId}/booking`, { state: { from: location } });
+  };
 
   return (
     <div className="flex flex-col p-4 bg-blue-200 gap-4">
       <h3 className="text-md font-bold">£{pricePerNight}</h3>
       <form
-        // onSubmit={
-        //   isLoggedIn ? handleSubmit(onSubmit) : handleSubmit(onSignInClick)
-        // }
+      onSubmit={
+        isAuth ? handleSubmit(onSubmit) : handleSubmit(onSignInClick)
+      }
       >
         <div className="grid grid-cols-1 gap-4 items-center">
           <div>
@@ -129,7 +124,7 @@ const GuestInfo = ({ hotelId, pricePerNight }: Props) => {
                 type="number"
                 min={0}
                 max={20}
-                {...register("childCount", {
+                {...register("childrenCount", {
                   valueAsNumber: true,
                 })}
               />
@@ -140,15 +135,15 @@ const GuestInfo = ({ hotelId, pricePerNight }: Props) => {
               </span>
             )}
           </div>
-          {/* {isLoggedIn ? (
+          {isAuth ? (
             <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
               Book Now
             </button>
           ) : (
-            <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
+            <button  className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
               Sign in to Book
             </button>
-          )} */}
+          )}
         </div>
       </form>
     </div>

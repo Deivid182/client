@@ -29,8 +29,8 @@ const Detail = () => {
     <div className="space-y-6">
       <div>
         <span className="flex">
-          {Array.from({ length: hotel.starRating }).map(() => (
-            <Star />
+          {Array.from({ length: hotel.starRating }).map((_, index) => (
+            <Star key={index}/>
           ))}
         </span>
         <h1 className="text-3xl font-bold">{hotel.name}</h1>
@@ -38,7 +38,7 @@ const Detail = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {hotel.imageUrls.map((image) => (
-          <div className="h-[300px]">
+          <div className="h-[300px]" key={image}>
             <img
               src={image}
               alt={hotel.name}
@@ -50,7 +50,7 @@ const Detail = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
         {hotel.facilities.map((facility) => (
-          <div className="border border-slate-300 rounded-sm p-3">
+          <div key={facility} className="border border-slate-300 rounded-sm p-3">
             {facility}
           </div>
         ))}

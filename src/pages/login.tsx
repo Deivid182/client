@@ -3,7 +3,7 @@ import { LoginData } from "../types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { login } from "../api/api-client";
 import { useApp } from "../hooks/use-app";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Login = () => {
   //TODO: disable the submit button if there is an error
@@ -12,6 +12,8 @@ const Login = () => {
   //TODO: Edit the error api message
   const { showToast } = useApp();
   const navigate = useNavigate();
+  const location = useLocation()
+  console.log(location)
   const {
     register,
     handleSubmit,
@@ -25,7 +27,7 @@ const Login = () => {
     onSuccess: async (data) => {
       showToast({ message: data.message, type: "success" });
       await queryClient.invalidateQueries({ queryKey: ["validateAuth"] });
-      navigate("/home");
+      navigate( location.state?.from?.pathname || "/home");
     },
     onError: (error) => {
       console.log(error.message);
